@@ -3,7 +3,7 @@ package org.openjfx.ppe;
 public class ChoixCouleur {
 	private Couleur couleur;
 
-	public ChoixCouleur(final double etat) {
+	public ChoixCouleur(double etat) {
 		
 		if(etat < 0.7) {
 			couleur = Couleur.vert;

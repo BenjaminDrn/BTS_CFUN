@@ -79,10 +79,8 @@ public class Arrivee {
 	}
 	
 	public void AddTime(int time) {
-		
 		this.hDep = Calendar.getInstance();
 		hDep.add(Calendar.MINUTE, +time);
-
 	}
 
 	public double getMontant() {
