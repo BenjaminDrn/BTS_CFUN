@@ -13,17 +13,18 @@ public class ReqSql {
      *
      */
     
-    private static void insertEntree(String lastname, String firstname, String salle, String codebarres, String date) {
+    private static void insertEntree(String lastname, String firstname, String salle, String codebarres, String dateentree, int numentree) {
     	Connection con = SqlConnection.connect();
     	PreparedStatement ps = null;
     	try {
-    		String sql = "INSERT INTO enter(lastname, firstname, salle, codebarres, date) VALUES(?,?,?,?,?)";
+    		String sql = "INSERT INTO users(lastname, firstname, salle, codebarres, dateentree, numentree) VALUES(?,?,?,?,?,?)";
     		ps = con.prepareStatement(sql);
     		ps.setString(1, lastname);
     		ps.setString(2, firstname);
     		ps.setString(3, salle);
     		ps.setString(4, codebarres);
-    		ps.setString(5, date);
+    		ps.setString(5, dateentree);
+    		ps.setInt(6, numentree);
     		ps.execute();
     		System.out.println("Data has been inserted !");
     	} catch(SQLException e) {
@@ -32,9 +33,36 @@ public class ReqSql {
     	
     }
     
-    public static void setInsertEntree(String lastname, String firstname, String salle, String codebarres, String date) {
-    	insertEntree(lastname, firstname, salle, codebarres, date);
+    public static void setInsertEntree(String lastname, String firstname, String salle, String codebarres, String dateentree, int numentree) {
+    	insertEntree(lastname, firstname, salle, codebarres, dateentree, numentree);
     }
+    
+    /*
+     * 
+     * 	Set cost and date exit into database
+     *
+     */
+    
+    private static void updateDataUser(String datetime, double cout, String codeBarres) {
+    	Connection con = SqlConnection.connect();
+    	PreparedStatement ps = null;
+    	try {
+    		String sql = "UPDATE users SET datesortie = ?, cost = ? WHERE codebarres =" + codeBarres;
+    		ps = con.prepareStatement(sql);
+    		ps.setString(1, datetime);
+    		ps.setDouble(2, cout);
+    		ps.execute();
+    		System.out.println("Data has been inserted !");
+    	} catch(SQLException e) {
+    		System.out.println(e.toString());
+    	}
+    	
+    }
+    
+    public static void setUpdateDataUser(String datetime, double cout, String codeBarres) {
+    	updateDataUser(datetime, cout, codeBarres);
+    }
+    
     
     /*
      * 
@@ -42,14 +70,15 @@ public class ReqSql {
      *
      */
     
-    private static void insertEquipement(String name, String salle) {
+    private static void insertEquipement(String name, String salle, Boolean disabled ) {
     	Connection con = SqlConnection.connect();
     	PreparedStatement ps = null;
     	try {
-    		String sql = "INSERT INTO equipement(name, salle) VALUES(?,?)";
+    		String sql = "INSERT INTO equipement(name, salle, disabled) VALUES(?,?,?)";
     		ps = con.prepareStatement(sql);
     		ps.setString(1, name);
-    		ps.setString(3, salle);
+    		ps.setString(2, salle);
+    		ps.setBoolean(3, disabled);
     		ps.execute();
     		System.out.println("Data has been inserted !");
     	} catch(SQLException e) {
@@ -58,37 +87,9 @@ public class ReqSql {
     	
     }
     
-    public static void setInsertEquipement(String name, String salle) {
-    	insertEquipement(name, salle);
+    public static void setInsertEquipement(String name, String salle, Boolean disabled) {
+    	insertEquipement(name, salle, disabled);
     }
-    
-    /*
-     * 
-     * 	Add cost in database
-     *
-     */
-    
-    private static void insertCost(String timeSpend, String cost, String codebarres) {
-    	Connection con = SqlConnection.connect();
-    	PreparedStatement ps = null;
-    	try {
-    		String sql = "INSERT INTO equipement(name, salle) VALUES(?,?)";
-    		ps = con.prepareStatement(sql);
-    		ps.setString(1, timeSpend);
-    		ps.setString(3, cost);
-    		ps.setString(3, codebarres);
-    		ps.execute();
-    		System.out.println("Data has been inserted !");
-    	} catch(SQLException e) {
-    		System.out.println(e.toString());
-    	}
-    	
-    }
-    
-    public static void setInsertCost(String timeSpend, String cost, String codebarres) {
-    	insertCost(timeSpend, cost, codebarres);
-    }
-    
     
     /*
      * 
@@ -111,46 +112,6 @@ public class ReqSql {
     	}
     }
 	
-    /*
-     * 
-     * 	read specific row on the database 
-     *
-     */
-    
-    private static Boolean readSpecificRow(String codebarres) {
-    	Connection con = SqlConnection.connect();
-    	PreparedStatement ps = null;
-    	ResultSet rs = null;
-    	
-    	try {
-    		String sql = "SELECT codebarres FROM enter WHERE codebarres = ?";
-    		ps = con.prepareStatement(sql);
-    		ps.setString(1, codebarres);
-    		rs = ps.executeQuery();
-    		
-    		if(rs.getString(1) != null) {    			
-    			return true;
-    		}
-    		
-    	} catch(SQLException e) {
-    		System.out.println(e.toString());
-    	} finally {
-    		try {
-    			rs.close();
-    			ps.close();
-    			con.close();
-    		} catch(SQLException e) {
-    			System.out.println(e.toString());
-    		}
-    	}
-		return false;
-		
-    }
-    
-    public static Boolean SetReadSpecificRow(String codebarres) {
-    	return readSpecificRow(codebarres);
-    }
-    
     /*
      * 
      * 	Row count
@@ -190,5 +151,69 @@ public class ReqSql {
     public static int setRowCount(String sqlreq) {
     	return RowCount(sqlreq);
     }
+    
+    /*
+     * 
+     * 
+     * 
+     */
+    
+    private static int sendDataSpecificRow(String codebarres) {
+    	Connection con = SqlConnection.connect();
+    	PreparedStatement ps = null;
+    	ResultSet rs = null;
+    	
+    	try {
+    		String sql = "SELECT * FROM users WHERE codebarres = ?";
+    		ps = con.prepareStatement(sql);
+    		ps.setString(1, codebarres);
+    		rs = ps.executeQuery();
+    		
+    		return rs.getInt("numentree");
+    		
+    	} catch(SQLException e) {
+    		System.out.println(e.toString());
+    	} finally {
+    		try {
+    			rs.close();
+    			ps.close();
+    			con.close();
+    		} catch(SQLException e) {
+    			System.out.println(e.toString());
+    		}
+    	}
+		return 0;
+		
+    }
+    
+    public static int setSendDataSpecificRow(String codebarres) {
+    	return sendDataSpecificRow(codebarres);
+    }
+    
+    /*
+     * 
+     * 	Add new enter into database
+     *
+     */
+    
+    private static void newGestionnaire(String username, String password) {
+    	Connection con = SqlConnection.connect();
+    	PreparedStatement ps = null;
+    	try {
+    		String sql = "INSERT INTO gestionnaire(username, password) VALUES(?,?)";
+    		ps = con.prepareStatement(sql);
+    		ps.setString(1, username);
+    		ps.setString(2, password);
+    		ps.execute();
+    		System.out.println("Data has been inserted !");
+    	} catch(SQLException e) {
+    		System.out.println(e.toString());
+    	}
+    	
+    }
+    
+    public static void setnewGestionnaire(String username, String password) {
+    	newGestionnaire(username, password);
+    }    
     
 }

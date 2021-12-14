@@ -1,46 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.ppe.Gestionnaire">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../../../CSS/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.ppe.Gestionnaire">
    <children>
-      <AnchorPane prefHeight="350.0" prefWidth="300.0" style="-fx-background-color: white;">
+      <AnchorPane fx:id="Anchor_loginGestionnaire" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" visible="true">
          <children>
-            <Label layoutX="82.0" layoutY="92.0" text="Connexion Gestionnaire" />
-            <Label layoutX="69.0" layoutY="126.0" textFill="#da4545">
+            <Label layoutX="200.0" layoutY="91.0" prefWidth="209.0" text="Connexion Gestionnaire">
+               <font>
+                  <Font name="Arial Bold" size="17.0" />
+               </font></Label>
+            <Label fx:id="label_errorLoginGestionnaire" layoutX="199.0" layoutY="126.0" prefHeight="13.0" prefWidth="208.0" textFill="#da4545">
                <font>
                   <Font size="10.0" />
                </font>
             </Label>
-            <TextField fx:id="fields_user" layoutX="69.0" layoutY="142.0" promptText="User" />
-            <TextField fx:id="fields_password" layoutX="69.0" layoutY="185.0" promptText="Mot de passe" />
-            <Button layoutX="151.0" layoutY="225.0" mnemonicParsing="false" text="Connexion" />
-            <Button layoutX="70.0" layoutY="225.0" mnemonicParsing="false" text="Retour" />
+            <TextField fx:id="fields_user" layoutX="199.0" layoutY="141.0" prefHeight="35.0" prefWidth="215.0" promptText="User" styleClass="input_txt_usernameGestionnaire" />
+            <TextField fx:id="fields_password" layoutX="199.0" layoutY="185.0" prefHeight="35.0" prefWidth="215.0" promptText="Mot de passe" styleClass="input_txt_passwordGestionnaire" />
+            <Button fx:id="button_loginGestionnaire" layoutX="199.0" layoutY="241.0" mnemonicParsing="false" onAction="#loginInterfaceGestionnaire" prefHeight="35.0" prefWidth="215.0" styleClass="button_loginGestionnaire" text="Connexion">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button fx:id="button_backToLoginUsers" layoutX="199.0" layoutY="287.0" mnemonicParsing="false" onAction="#loginUsers" prefHeight="35.0" prefWidth="215.0" styleClass="button_back" text="Retour">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="350.0" prefWidth="300.0" style="-fx-background-color: white;">
+      <AnchorPane fx:id="Anchor_interfaceGestionnaire" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" visible="false">
          <children>
-            <Label layoutX="6.0" layoutY="14.0" text="Musculation" />
-            <GridPane layoutX="1.0" layoutY="73.0" prefHeight="90.0" prefWidth="298.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <TextField layoutX="4.0" layoutY="30.0" promptText="Nom de la machine" />
-            <Button layoutX="172.0" layoutY="30.0" mnemonicParsing="false" text="Ajouter" />
+           <Label layoutX="18.0" layoutY="15.0" text="Gestionnaire" />
+           <GridPane fx:id="grid_equipement" layoutY="54.0" prefHeight="220.0" prefWidth="300.0">
+        
+      	   </GridPane>
+           <Button fx:id="btn_logout" layoutX="186.0" layoutY="9.0" mnemonicParsing="false" onAction="#logout" text="Déconnexion" />
          </children>
       </AnchorPane>
    </children>

@@ -1,5 +1,6 @@
 package org.openjfx.ppe;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,12 +10,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Entree {
 	
-	private static int nbPlaceTotalFitness = ReqSql.setRowCount("SELECT COUNT(*) AS rowcount FROM equipement WHERE salle='musculation';");
-	private static int nbPlaceTotalMuscu = ReqSql.setRowCount("SELECT COUNT(*) AS rowcount FROM equipement WHERE salle='fitness';");
-	private static final String nomComplexe = "C Fun";
 	
 	/*
 	 * 
@@ -30,6 +31,9 @@ public class Entree {
 	
 	@FXML
 	private AnchorPane Anchor_choixSalle;
+	
+	@FXML 
+	private AnchorPane Anchor_displayCodebarres;
 	
 	@FXML
 	private TextField fields_lastname;
@@ -62,6 +66,9 @@ public class Entree {
 	private Button button_loginGestionnaire;
 	
 	@FXML
+	private Button button_exitDisplayCodebarres;
+	
+	@FXML
 	private Label label_errorLogin;
 	
 	@FXML
@@ -76,6 +83,18 @@ public class Entree {
 	@FXML
 	private Label label_nbPlacesMuscu;
 	
+	@FXML
+	private Circle circle_etatMuscu;
+	
+	@FXML
+	private Circle circle_etatFitness;
+	
+	@FXML
+	private ImageView img_loginGestionnaire;
+	
+	@FXML
+	private ImageView img_codebarres;
+	
 	
 	/*
 	 * 
@@ -83,26 +102,28 @@ public class Entree {
 	 *
 	 */
 	
-	private String getLastname() {
+	public String getLastname() {
 		return fields_lastname.getText();
 	}
 	
-	private String getFirtname() {
+	public String getFirstname() {
 		return fields_firstname.getText();
 	}
 	
-	private String getCodebarres() {
+	public String getCodebarres() {
 		return fields_codebarres.getText();
 	}
 	
 	/*
 	 * 
-	 * Création du complexe
-	 * 
+	 * Initialisation de complexe 
+	 *
 	 */
 	
-	
-	Complexe complexe = new Complexe(nbPlaceTotalFitness, nbPlaceTotalMuscu, "CFUN");
+	private static int nbPlaceTotalFitness = ReqSql.setRowCount("SELECT COUNT(*) AS rowcount FROM equipement WHERE salle='musculation';");
+	private static int nbPlaceTotalMuscu = ReqSql.setRowCount("SELECT COUNT(*) AS rowcount FROM equipement WHERE salle='fitness';");
+	private static final String nomComplexe = "CFUN";
+	Complexe leComplexe = new Complexe(nbPlaceTotalMuscu, nbPlaceTotalFitness, nomComplexe);
 	
 	/*
 	 * 
@@ -123,61 +144,33 @@ public class Entree {
 	
 	@FXML
     private void enterComplex() throws IOException {
-		if(getLastname().isEmpty() || getFirtname().isEmpty()) {
+		if(getLastname().isEmpty() || getFirstname().isEmpty()) {
 			label_errorLogin.setText("Entrez votre nom et prénom");	
 		} else {
-			Anchor_login.setVisible(false);
-			
-			//Initialisation de la clasee complexe
-			
-			
-			//Affichage de l'interface
-			Anchor_choixSalle.setVisible(true);
-			label_bienvenue.setText("Bonjour " + getFirtname());
-			
-			
-			// Niveau d'occupation des salles
-			
-			
-			label_nbPlacesFitness.setText("places : "  + "/" + nbPlaceTotalFitness);
-			
-			
-			
-			label_nbPlacesMuscu.setText("places : "  + "/" + nbPlaceTotalMuscu);
-			
+			if(ReqSql.setRowCount("SELECT COUNT(*) AS rowcount FROM users WHERE firstname='"+getFirstname()+"' AND lastname='"+getLastname()+"' AND datesortie IS NULL ;") == 0) {
+				
+				Anchor_login.setVisible(false);
+				
+				ChoixCouleur choixCouleurMuscu = new ChoixCouleur(leComplexe.etatMuscu());
+				circle_etatMuscu.setFill(choixCouleurMuscu.getCouleurInterface());
+				
+				ChoixCouleur choixCouleurFit = new ChoixCouleur(leComplexe.etatFit());
+				circle_etatFitness.setFill(choixCouleurFit.getCouleurInterface());
+				
+				//Affichage de l'interface
+				Anchor_choixSalle.setVisible(true);
+				label_bienvenue.setText("Bonjour " + getFirstname());
+				
+				// Niveau d'occupation des salles
+				label_nbPlacesFitness.setText("places : " + leComplexe.getNbPlacesRestantesFit() + "/" + nbPlaceTotalFitness);
+				label_nbPlacesMuscu.setText("places : " + leComplexe.getNbPlacesRestantesMuscu() + "/" + nbPlaceTotalMuscu);
+				
+			} else {
+				label_errorLogin.setText("Vous êtes déjà entrée");
+			}
 		}
     }
 	
-	/*
-	 * 
-	 * action button to valid codebarres
-	 *
-	 */
-	
-	@FXML 
-	private void exitComplex() throws IOException{
-		if(getCodebarres().isEmpty() && getCodebarres().length() < 12) {
-			label_errorCodebarres.setText("Entrez un code-barres de 12 chiffres");
-		} else {
-			// vérification dans la bdd si le numéro du code barre existe 
-			if(ReqSql.SetReadSpecificRow(getCodebarres()) == true) {
-				
-				// calculer la différence entre la date d'entrée et de sortie 
-				
-				// calculer le cout
-				
-				// si il existe, enregistrer le prix que doit l'employer 
-				//ReqSql.setInsertCost(timeSpend, cost, codebarres);
-				
-			}
-			
-			
-			
-		}
-	}
-	
-	
-
 	/*
 	 * 
 	 * action button to enter in codeBarres interface
@@ -188,6 +181,26 @@ public class Entree {
 	private void enterCodebarres() throws IOException{
 		Anchor_login.setVisible(false);
 		Anchor_codebarres.setVisible(true);
+		label_errorCodebarres.setText("");
+	}
+	
+	/*
+	 * 
+	 * action button to valid codebarres
+	 *
+	 */
+	
+	@FXML 
+	private void exitComplex() throws IOException{
+		if(getCodebarres().isEmpty() && getCodebarres().length() != 12) {
+			label_errorCodebarres.setText("Entrez un code-barres de 12 chiffres");
+		} else {
+			// vérification dans la bdd si le numéro du code barre existe 
+			int numUsersExit = ReqSql.setSendDataSpecificRow(getCodebarres());
+			
+			ReqSql.setUpdateDataUser(datetime(), leComplexe.sortieUsager(numUsersExit).getMontant(), getCodebarres());
+			
+		}
 	}
 	
 	/*
@@ -200,6 +213,7 @@ public class Entree {
 	private void exitCodebarres() throws IOException {
 		Anchor_codebarres.setVisible(false);
 		Anchor_login.setVisible(true);
+		label_errorLogin.setText("");
 	}
 	
 	/*
@@ -210,48 +224,77 @@ public class Entree {
 	
 	@FXML
 	private void fitnessComplex() throws IOException{
-		//Anchor_choixSalle.setVisible(false);
-		CodeBarre();
 		
-		String codebarres = CodeBarre();
+		if(leComplexe.getNbPlacesRestantesFit() > 0) {
+			// Changement d'interface
+			Anchor_choixSalle.setVisible(false);
+			
+			// Génération du code barre
+			String codebarres = CodeBarres.SetCodeBarre();
+			File Img = CodeBarres.SetcreateImage(codebarres);
+			
+			// Initialisation d'une nouvelle arrivée en fitness
+			Arrivee arriveFitness = new Arrivee(leComplexe, "fitness");
+			
+			if (leComplexe.entreeUsager(arriveFitness)) {
+				 System.out.println(arriveFitness.afficheBillet()); 
+				 System.out.println(leComplexe.lesInfos());
+				 } 
+			
+			//Enregistrement en base de donnée d'une nouvelle arrivée
+			ReqSql.setInsertEntree(getLastname(), getFirstname(), "fitness", codebarres, datetime(), arriveFitness.afficheBillet());
+			
+			Anchor_displayCodebarres.setVisible(true);
+			Image image = new Image(Img.toURI().toString());
+			img_codebarres.setImage(image);
+			
+		} else {
+			
+			System.out.println("Plus de place");
+			
+		}
 		
-		Arrivee arriveeFitness = new Arrivee(complexe, 'M');
-		
-		//Enregistrement en base de donnée
-		//ReqSql.setInsertEntree(getLastname(), getFirtname(), "fitness", codebarres, datetime());
-
 	}
 	
 	@FXML
 	private void muscuComplex() throws IOException{
-		//Anchor_choixSalle.setVisible(false);
 		
-		String codebarres = CodeBarre();
-		
-		//Enregistrement en base de donnée
-		//ReqSql.setInsertEntree(getLastname(), getFirtname(), "musculation", codebarres, datetime());
-		
+		if(leComplexe.getNbPlacesRestantesMuscu() > 0) {
+			// Changement d'interface
+			Anchor_choixSalle.setVisible(false);
+			
+			// Génération du code barre
+			String codebarres = CodeBarres.SetCodeBarre();
+			File Img = CodeBarres.SetcreateImage(codebarres);
+			
+			// Initialisation d'une nouvelle arrivée en musculation
+			Arrivee arriveMusculation = new Arrivee(leComplexe, "musculation");
+			
+			if (leComplexe.entreeUsager(arriveMusculation)) {
+				 System.out.println(arriveMusculation.afficheBillet());
+				 System.out.println(leComplexe.lesInfos());
+				 } 
+			
+			//Enregistrement en base de donnée d'une nouvelle arrivée
+			ReqSql.setInsertEntree(getLastname(), getFirstname(), "musculation", codebarres, datetime(), arriveMusculation.afficheBillet());
+			
+			Anchor_displayCodebarres.setVisible(true);
+			Image image = new Image(Img.toURI().toString());
+			img_codebarres.setImage(image);
+			
+		} else {
+			
+			System.out.println("Plus de place");
+			
+		}
 	}
-    
-    /*
-     * 
-     * generate code-barres 
-     *
-     */
-    
-     private String CodeBarre() {
-		String pattern = "ddMMyyHHmm";
-		SimpleDateFormat dateTimeFormatCodebarres = new SimpleDateFormat(pattern);
-		String dateEntree = dateTimeFormatCodebarres.format(new Date());
-		
-		int randomNb = (int) Math.floor( Math.random() * 99 ) + 10;
-		
-		String nbCodeBarres = randomNb + "" + dateEntree;
-		
-		//CodeBarres.createImage("codebarres.png", nbCodeBarres);
-		
-		return nbCodeBarres;
-     }
+	
+	@FXML 
+	private void exitPopUpCodebarres() throws IOException{
+		Anchor_displayCodebarres.setVisible(false);
+		Anchor_login.setVisible(true);
+		label_errorLogin.setText("");
+	}
      
      /*
       * 
@@ -266,44 +309,5 @@ public class Entree {
     	 
     	 return datetime;
      }
-     
-     
- 	private static final String TYPE = "Type opération (E)ntrée ou (S)ortie : ";
- 	private static final String SORTIE = "N° d'entrée à sortir : ";
- 	private static final String CHOIX = "(M)usculation, (F)itness : ";
- 	private static final String AUTRE = "Autre opération (O/N) : ";
- 	
- 	public static void main(String[] args) {
- 		Complexe leComplexe = new Complexe(nbPlaceTotalMuscu, nbPlaceTotalFitness, nomComplexe);
- 		
- 		char repAutre = 'O';
- 		char repType;
- 		int repSortie;
- 		char repChoix;
- 		
- 		while (repAutre == 'O') {
- 			repType = Character.toUpperCase(javax.swing.JOptionPane.showInputDialog(TYPE).charAt(0));
- 			//Si il y a une entrée E 
- 			if (repType == 'E') {
- 				//Ont demander le choix de la salle de sport
- 				repChoix = Character.toUpperCase(javax.swing.JOptionPane.showInputDialog(CHOIX).charAt(0));
- 				// Arrivee (le Complexe, la salle choisi)
- 				Arrivee jArrive = new Arrivee(leComplexe, repChoix);
- 				// Si il existe, affciher le ticket
- 				if (leComplexe.entreeUsager(jArrive)) {
- 					System.out.println(jArrive.afficheBillet());
- 				}
- 			}
- 			//Si l'entrée est S
- 			else{
- 				
- 				repSortie = Integer.parseInt(javax.swing.JOptionPane.showInputDialog(SORTIE));
- 				System.out.println(leComplexe.sortieUsager(repSortie).afficheTicket());
- 			}
- 			System.out.print(leComplexe.lesInfos());
- 			repAutre = Character.toUpperCase(javax.swing.JOptionPane.showInputDialog(AUTRE).charAt(0));
- 		}
- 		System.exit(0);	
- 	}
 	
 }

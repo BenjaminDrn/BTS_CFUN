@@ -9,15 +9,15 @@ class ArriveeTest {
 	void testArrivee() {
 		Complexe newComplexe = new Complexe(4, 4, "CFUN");
 		
-		Arrivee arrivee65 = new Arrivee(newComplexe, 'F');
+		Arrivee arrivee65 = new Arrivee(newComplexe, "Fitness");
 		arrivee65.AddTime(65);
 		assertEquals("Erreur d'arrivée 65 minutes", arrivee65.getMontant(), 1.5, 0.0);
 		
-		Arrivee arrivee12 = new Arrivee(newComplexe, 'F');
+		Arrivee arrivee12 = new Arrivee(newComplexe, "Fitness");
 		arrivee12.AddTime(12);
 		assertEquals("Erreur d'arrivée 12 minutes", arrivee12.getMontant(), 0.0, 0.0);
 		
-		Arrivee arrivee35 = new Arrivee(newComplexe, 'F');
+		Arrivee arrivee35 = new Arrivee(newComplexe, "Fitness");
 		arrivee35.AddTime(35);
 		assertEquals("Erreur d'arrivée 35 minutes", arrivee35.getMontant(), 1.0, 0.0);
 	}

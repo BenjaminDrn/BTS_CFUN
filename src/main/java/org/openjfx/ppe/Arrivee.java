@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+
 public class Arrivee {
 	private static int numeroSortie = 0;
 	private int numeroArrivee;
@@ -12,9 +13,9 @@ public class Arrivee {
 		return numeroArrivee;
 	}
 
-	private char choixSport;
+	private String choixSport;
 
-	public char getChoixSport() {
+	public String getChoixSport() {
 		return choixSport;
 	}
 
@@ -23,14 +24,14 @@ public class Arrivee {
 
 	private Complexe complexe;
 
-	public Arrivee(final Complexe complexe, final char choixSport) {
+	public Arrivee(final Complexe complexe, final String string) {
 		this.horaireArrivee = Calendar.getInstance().getTimeInMillis();
-		this.choixSport = choixSport;
+		this.choixSport = string;
 		this.complexe = complexe;
 		this.hDep = null;
 	}
 
-	public String afficheBillet() {
+	public int afficheBillet() {
 		final String MSGNOM = "Complexe ";
 		final String MSGNUM = "Billet d'entrée n° : ";
 		final String MSGDATE = "Date : ";
@@ -48,10 +49,12 @@ public class Arrivee {
 		SimpleDateFormat lHeure = new SimpleDateFormat("HH:mm");
 		leBillet += MSGHEURE + lHeure.format(laDate) + "\n";
 
-		return leBillet;
+		return this.numeroArrivee;
 	}
 
+	// function qui retourne l'heure de départs
 	public String afficheTicket() {
+
 		final String MSGNOM = "Complexe ";
 		final String MSGNUM = "Ticket de sortie n° : ";
 		final String MSGDATE = "Date : ";
@@ -66,16 +69,16 @@ public class Arrivee {
 		this.hDep = Calendar.getInstance();
 		
 		//on simule ici une sortie 32 mn plus tard
-		hDep.add(Calendar.MINUTE, +10);
+		hDep.add(Calendar.MINUTE, +60);
 		
 		Date laDate = hDep.getTime();
-		SimpleDateFormat leJour = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat leJour = new SimpleDateFormat("yyyy-MM-dd");
 		leTicket += MSGDATE + leJour.format(laDate) + "\n";
 		SimpleDateFormat lHeure = new SimpleDateFormat("HH:mm");
 		leTicket += MSGHEURE + lHeure.format(laDate) + "\n";
 		leTicket += MSGCOUT + this.getMontant() + " €\n";
 
-		return leTicket;
+		return leJour.format(laDate) + " " + lHeure.format(laDate);
 	}
 	
 	public void AddTime(int time) {

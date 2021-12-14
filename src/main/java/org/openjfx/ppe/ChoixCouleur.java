@@ -1,5 +1,8 @@
 package org.openjfx.ppe;
 
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+
 public class ChoixCouleur {
 	private Couleur couleur;
 
@@ -18,4 +21,20 @@ public class ChoixCouleur {
 	public Couleur getCouleur() {
 		return couleur;
 	}
+	
+	public Paint getCouleurInterface() {
+		
+		if(couleur == Couleur.vert) {
+			return Color.GREEN;
+		} else if (couleur == Couleur.orange) {
+			return Color.ORANGE;
+		} else if (couleur == Couleur.rouge) {
+			return Color.RED;
+		}
+		
+		return Color.RED;
+		
+	}
+
+
 }

@@ -34,11 +34,11 @@ public class Complexe {
 
 	public boolean entreeUsager(final Arrivee uneArrivee) {
 		boolean ok;
-		char choix;
+		String choix;
 
 		ok = false;
 		choix = uneArrivee.getChoixSport();
-		if (choix == 'F') {
+		if (choix == "fitness") {
 			if (this.etatFit() != 1) {
 				Complexe.setNumeroActuel();
 				uneArrivee.setNumeroArrivee(Complexe.getNumeroActuel());
@@ -60,7 +60,7 @@ public class Complexe {
 
 	public Arrivee sortieUsager(final int entree) {
 		Arrivee leDepart = recherche(entree);
-		if (leDepart.getChoixSport() == 'F') {
+		if (leDepart.getChoixSport() == "fitness") {
 			this.oterUsagerFitness();
 		} else {
 			this.oterUsagerMusculation();
@@ -113,7 +113,7 @@ public class Complexe {
 
 		leDoc += MSGDISPMUSCU + this.getNbPlacesRestantesMuscu() + "\t";
 		leDoc += MSGOCCMUSCU + this.nbPlacesOccupeesMuscu + "\t";
-		leDoc += MSGTXMUSCU + df2.format(this.etatMuscu()) + "\t";
+		leDoc += MSGTXMUSCU + df2.format(this.etatMuscu()) + "\t";//error
 		leDoc += MSGCOULMUSCU + this.couleurMuscu() + "\n";
 
 		leDoc += MSGDISPFIT + this.getNbPlacesRestantesFit() + "\t";
