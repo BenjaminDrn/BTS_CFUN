@@ -8,11 +8,17 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../../../CSS/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.openjfx.ppe.Entree">
    <children>
+   
+   	  <!-- ==================== PAGE LOGIN ==================== -->
+   	
       <AnchorPane fx:id="Anchor_login" maxHeight="450.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #eeeeee;" visible="true">
          <children>
             <AnchorPane layoutX="300.0" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: white;">
@@ -29,7 +35,7 @@
                   </Label>
                   <TextField fx:id="fields_firstname" layoutX="40.0" layoutY="142.0" prefHeight="35.0" prefWidth="215.0" promptText="Prénom" styleClass="input_txt_firstname" />
                   <TextField fx:id="fields_lastname" layoutX="40.0" layoutY="196.0" prefHeight="35.0" prefWidth="215.0" promptText="Nom" styleClass="input_txt_lastname" />
-                  <Button fx:id="button_login" layoutX="40.0" layoutY="251.0" mnemonicParsing="false" onAction="#enterComplex" prefHeight="37.0" prefWidth="215.0" styleClass="button_entree" text="Entrer">
+                  <Button fx:id="button_login" layoutX="40.0" layoutY="251.0" mnemonicParsing="false" onAction="#enterComplexPage" prefHeight="37.0" prefWidth="215.0" styleClass="button_entree" text="Entrer">
                      <padding>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
@@ -37,7 +43,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="button_exit" layoutX="40.0" layoutY="296.0" mnemonicParsing="false" onAction="#enterCodebarres" prefHeight="37.0" prefWidth="215.0" styleClass="button_sortir" text="Sortir">
+                  <Button fx:id="button_exit" layoutX="40.0" layoutY="296.0" mnemonicParsing="false" onAction="#enterLogoutPage" prefHeight="37.0" prefWidth="215.0" styleClass="button_sortir" text="Sortir de la salle">
                      <padding>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
@@ -70,7 +76,10 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="Anchor_codebarres" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" visible="false">
+      
+      <!-- ==================== PAGE LOGOUT ==================== -->
+      
+      <AnchorPane fx:id="Anchor_logout" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" visible="false">
          <children>
             <Label layoutX="200.0" layoutY="90.0" prefHeight="20.0" prefWidth="215.0" text="Sortir du complexe">
                <font>
@@ -92,34 +101,59 @@
                   <Font size="10.0" />
                </font>
             </Label>
-            <Button fx:id="button_backCodeBarre" layoutX="198.0" layoutY="248.0" mnemonicParsing="false" onAction="#exitCodebarres" prefHeight="35.0" prefWidth="215.0" styleClass="button_back" text="retour">
+            <Button fx:id="button_backCodeBarre" layoutX="198.0" layoutY="248.0" mnemonicParsing="false" onAction="#exitLogoutPage" prefHeight="35.0" prefWidth="215.0" styleClass="button_back" text="retour">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
          </children>
       </AnchorPane>
+      
+      <!-- ==================== PAGE COMPLEX ==================== -->
+      
       <AnchorPane fx:id="Anchor_choixSalle" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" visible="false">
          <children>
-            <Button fx:id="button_fitnessComplex" disable="false" layoutX="217.0" layoutY="250.0" mnemonicParsing="false" onAction="#fitnessComplex" prefWidth="100.0" text="Fitness">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="button_muscuComplex" disable="false" layoutX="216.0" layoutY="202.0" mnemonicParsing="false" onAction="#muscuComplex" prefHeight="26.0" prefWidth="100.0" text="Musculation">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Label fx:id="label_bienvenue" layoutX="198.0" layoutY="131.0" prefHeight="17.0" prefWidth="201.0" />
-            <Label fx:id="label_nbPlacesMuscu" layoutX="321.0" layoutY="205.0" prefHeight="17.0" prefWidth="103.0" />
-            <Label fx:id="label_nbPlacesFitness" layoutX="322.0" layoutY="255.0" prefHeight="17.0" prefWidth="100.0" />
-            <Circle fx:id="circle_etatMuscu" fill="DODGERBLUE" layoutX="191.0" layoutY="213.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-            <Circle fx:id="circle_etatFitness" fill="DODGERBLUE" layoutX="192.0" layoutY="264.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Label fx:id="label_bienvenue" layoutX="50.0" layoutY="50.0" prefHeight="38.0" prefWidth="484.0">
+               <font>
+                  <Font size="22.0" />
+               </font></Label>
+            <GridPane alignment="CENTER" layoutX="50.0" layoutY="121.0" prefHeight="227.0" prefWidth="501.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label fx:id="label_nbPlacesFitness" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="150.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Button fx:id="button_fitnessComplex" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#fitnessComplex" prefHeight="40.0" prefWidth="200.0" text="Fitness" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Label fx:id="label_nbPlacesMuscu"  alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="150.0" textAlignment="CENTER" GridPane.rowIndex="2" />
+                  <Button fx:id="button_muscuComplex" disable="false" mnemonicParsing="false" onAction="#muscuComplex" prefHeight="40.0" prefWidth="200.0" text="Musculation" GridPane.rowIndex="1">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Rectangle fx:id="rect_etatMuscu" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" />
+                  <Rectangle fx:id="rect_etatFitness" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
          </children>
       </AnchorPane>
+      
+      <!-- ==================== PAGE CODE BARRES ==================== -->
+      
       <AnchorPane fx:id="Anchor_displayCodebarres" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" visible="false">
          <children>
-            <Button fx:id="button_exitDisplayCodebarres" layoutX="194.0" layoutY="341.0" mnemonicParsing="false" onAction="#exitPopUpCodebarres" prefHeight="35.0" prefWidth="215.0" styleClass="button_back" text="Sortir" />
+            <Button fx:id="button_exitDisplayCodebarres" layoutX="194.0" layoutY="341.0" mnemonicParsing="false" onAction="#exitCodebarresPage" prefHeight="35.0" prefWidth="215.0" styleClass="button_back" text="Retour au l'accueil">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
             <Label layoutX="130.0" layoutY="14.0" text="Voici votre code-barres à présenter à la sortie de votre sécance" />
             <ImageView fx:id="img_codebarres" fitHeight="103.0" fitWidth="200.0" layoutX="201.0" layoutY="146.0">
                <image>
@@ -128,5 +162,6 @@
             </ImageView>
          </children>
       </AnchorPane>
+      
    </children>
 </AnchorPane>

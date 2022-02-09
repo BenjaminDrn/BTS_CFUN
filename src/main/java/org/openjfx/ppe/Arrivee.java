@@ -49,11 +49,13 @@ public class Arrivee {
 		SimpleDateFormat lHeure = new SimpleDateFormat("HH:mm");
 		leBillet += MSGHEURE + lHeure.format(laDate) + "\n";
 
+		
+		//return leBillet;
 		return this.numeroArrivee;
 	}
 
 	// function qui retourne l'heure de départs
-	public String afficheTicket() {
+	public double afficheTicket() {
 
 		final String MSGNOM = "Complexe ";
 		final String MSGNUM = "Ticket de sortie n° : ";
@@ -68,7 +70,7 @@ public class Arrivee {
 
 		this.hDep = Calendar.getInstance();
 		
-		//on simule ici une sortie 32 mn plus tard
+		//on simule ici une sortie 60 mn plus tard
 		hDep.add(Calendar.MINUTE, +60);
 		
 		Date laDate = hDep.getTime();
@@ -78,7 +80,11 @@ public class Arrivee {
 		leTicket += MSGHEURE + lHeure.format(laDate) + "\n";
 		leTicket += MSGCOUT + this.getMontant() + " €\n";
 
-		return leJour.format(laDate) + " " + lHeure.format(laDate);
+		
+		return this.getMontant();
+		
+		//return leTicket;
+		//return leJour.format(laDate) + " " + lHeure.format(laDate);
 	}
 	
 	public void AddTime(int time) {

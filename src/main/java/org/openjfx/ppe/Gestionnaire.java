@@ -100,14 +100,8 @@ public class Gestionnaire {
 		    		
 		    		while (rs.next()) {
 		    			Label labelNameEquipement = new Label(rs.getString("name"));
-		                Button btnDelete = new Button("Delete");
-		                btnDelete.setId(rs.getInt("id") + "");
-		                Button btnDisabled = new Button("Disabled");
-		                btnDisabled.setId(rs.getInt("id") + "");
 		                 	
 		                grid_equipement.add(labelNameEquipement, 0, row, 1, 1);
-		                grid_equipement.add(btnDelete, 1, row, 1, 1);
-		                grid_equipement.add(btnDisabled, 2, row, 1, 1);
 		                
 		                grid_equipement.setHgap(10);
 		                grid_equipement.setVgap(5);
