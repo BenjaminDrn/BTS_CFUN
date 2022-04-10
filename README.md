@@ -7,5 +7,5 @@ Launch app
    
 Access to manager page
 
-  id : Benjamin
+  id : Benjamin <br>
   mdp : 1234
