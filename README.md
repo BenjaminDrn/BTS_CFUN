@@ -2,7 +2,7 @@
 
 Launch app
    ```sh
-   clear java-fx:run
+   clean javafx:run
    ```
    
 Access to manager page
